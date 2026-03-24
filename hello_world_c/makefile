@@ -1,6 +1,7 @@
 CC=m68k-linux-gnu-gcc
 LD=m68k-linux-gnu-ld
 LDFLAGS=-v -z noexecstack -T cms307.ld
+INCLUDE=-I../include
 OBJCOPY=m68k-linux-gnu-objcopy
 OBJS=init307.o uart.o hello_world.o
 
@@ -11,7 +12,7 @@ hello_world.a: $(OBJS) cms307.ld
 	$(LD) $(LDFLAGS) -o $@ -Map $(basename $@).map $(OBJS)
 
 %.o: %.S
-	$(CC) -c -Wa,-mcpu=68307 -Wa,--register-prefix-optional -Wa,-a=$(basename $@).lst $^
+	$(CC) $(INCLUDE) -c -Wa,-mcpu=68307 -Wa,--register-prefix-optional -Wa,-a=$(basename $@).lst $^
 
 %.o: %.c
 	$(CC) -march=68000 -c $^

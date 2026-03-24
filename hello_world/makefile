@@ -1,16 +1,17 @@
 CC=m68k-linux-gnu-gcc
 LD=m68k-linux-gnu-ld
+INCLUDE=-I../include
 LDFLAGS=-v -z noexecstack -T cms307.ld
 OBJCOPY=m68k-linux-gnu-objcopy
 
 hello_world.hex: hello_world.a 
 	$(OBJCOPY) -O ihex $^ $@
 
-hello_world.a: hello_world.o cms307.ld mc68307.h
+hello_world.a: hello_world.o cms307.ld
 	$(LD) $(LDFLAGS) -o $@ -Map $(basename $@).map $(basename $@).o
 
 %.o: %.S
-	$(CC) -c -Wa,-mcpu=68307 -Wa,--register-prefix-optional -Wa,-a=$(basename $@).lst $^
+	$(CC) $(INCLUDE) -c -Wa,-mcpu=68307 -Wa,--register-prefix-optional -Wa,-a=$(basename $@).lst $^
 
 %.o: %.c
 	$(CC) -march=68000 -c $^

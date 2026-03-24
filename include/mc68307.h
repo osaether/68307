@@ -1,5 +1,4 @@
 #define MBASE   0x100000     // Module Base Address
-#define MBASE   0x100000
 
 // System Integration Module
 
