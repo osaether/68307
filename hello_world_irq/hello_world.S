@@ -89,7 +89,7 @@ uartisr:
         moveb   #0,UIMR
         moveml  d0-d1/a0,-(sp)
 
-        tst.b   txcnt
+        tstb    txcnt
         beq     1f                      // Branch if no data in buffer
         lea     txbuf,a0                // Buffer base address
         moveql  #0,d1
@@ -99,7 +99,7 @@ uartisr:
         addqb   #1,txrp
         andib   #(TX_BUF_SIZE-1),txrp
         subqb   #1,txcnt
-        tst.b   txcnt
+        tstb    txcnt
         beq     1f
         moveb   #1,UIMR                 // Enable TX interrupt for remaining chars
 1:      moveml  (sp)+,d0-d1/a0
@@ -122,5 +122,5 @@ putch:  moveml  d1/a0,-(sp)
         andib   #(TX_BUF_SIZE-1),txwp
         addqb   #1,txcnt
 2:      moveb   #1,UIMR                 // Enable TX interrupt for remaining chars
-3:      movem.l (sp)+,d1/a0 
+3:      moveml  (sp)+,d1/a0 
         rts

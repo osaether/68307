@@ -16,9 +16,9 @@ txbuf:  .fill   TX_BUF_SIZE             // TX_BUF_SIZE character circular buffer
         .text
         .global putch
 putch:  moveml d0/a0,-(sp)
-        cmp.b   #TX_BUF_SIZE,txcnt
+        cmpb    #TX_BUF_SIZE,txcnt
         bge     3f                      // Buffer full */
-        tst.b   txcnt
+        tstb    txcnt
         bne     1f
         btst    #2,USR                  // Check TXRDY bit
         beq     1f                      // Write to buffer if not ready
