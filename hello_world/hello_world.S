@@ -62,19 +62,19 @@ putc:   btstb   #2,USR
         rts
 
 uart_init:
-        move.w  #0x000C,PBCNT           // PB2 and PB3 used for UART
-        move.b  #0x20,UCR               // Reset receiver
-        move.b  #0x30,UCR               // Reset transmitter
-        move.b  #0x4C,UIVR              // UART interrupt vector
-        move.b  #0xE0,UACR              // Set 2, Timer mode, divided by 1
-        move.b  #0x00,UBG1              // MSB
-        move.b  #0x03,UBG2              // 115200 baud
-//        move.b  #0x30,UBG2              // 9600 baud
-        move.b  #0,UISR                 // Clear interrupt status register
-        move.b  #0x10,UCR               // Reset mode register pointer
-        move.b  #0x13,UMR1              // 8N1
-        move.b  #0x07,UMR2              // 1 stop bit
-        move.b  #0xDD,UCSR              // Clock select
-        move.b  #0x04,UCR               // Enable transmitter ONLY
-        move.b  #0x00,UIMR              // NO interrupts for now
+        movew   #0x000C,PBCNT           // PB2 and PB3 used for UART
+        moveb   #0x20,UCR               // Reset receiver
+        moveb   #0x30,UCR               // Reset transmitter
+        moveb   #0x4C,UIVR              // UART interrupt vector
+        moveb   #0xE0,UACR              // Set 2, Timer mode, divided by 1
+        moveb   #0x00,UBG1              // MSB
+        moveb   #0x03,UBG2              // 115200 baud
+//        moveb  #0x30,UBG2              // 9600 baud
+        moveb   #0,UISR                 // Clear interrupt status register
+        moveb   #0x10,UCR               // Reset mode register pointer
+        moveb   #0x13,UMR1              // 8N1
+        moveb   #0x07,UMR2              // 1 stop bit
+        moveb   #0xDD,UCSR              // Clock select
+        moveb   #0x04,UCR               // Enable transmitter ONLY
+        moveb   #0x00,UIMR              // NO interrupts for now
         rts
