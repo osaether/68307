@@ -1,0 +1,12 @@
+# Build artifacts
+*.o
+*.a
+*.hex
+*.lst
+*.map
+
+# Datasheets (large binaries, downloaded separately)
+*.pdf
+
+# Transient session-handoff notes
+HANDOFF.md
