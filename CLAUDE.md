@@ -43,7 +43,7 @@ Note the ISA flags differ by source type: `.S` files assemble with `-Wa,-mcpu=68
 
 ## Datasheet reference
 
-`MC68307UM.pdf` (265-page user manual) is the authority for every register bit. It is large and copyrighted, so it is **not committed** — download it separately into the repo root, where it stays untracked (`*.pdf` is gitignored). Extract searchable text with `pdftotext -layout ../MC68307UM.pdf -` (from a sub-project dir, or drop the `../` from the root) and grep for register names / table numbers (e.g. Table 8-11 for the UART UACR field encodings).
+`MC68307UM.pdf` (265-page user manual) is the authority for every register bit. It is large and copyrighted, so it is **not committed** — download it separately from [NXP](https://www.nxp.com/docs/en/reference-manual/MC68307UM.pdf) into the repo root, where it stays untracked (`*.pdf` is gitignored). Extract searchable text with `pdftotext -layout ../MC68307UM.pdf -` (from a sub-project dir, or drop the `../` from the root) and grep for register names / table numbers (e.g. Table 8-11 for the UART UACR field encodings).
 
 ## Memory layout (cms307.ld)
 
