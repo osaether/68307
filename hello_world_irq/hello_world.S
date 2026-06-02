@@ -7,10 +7,10 @@
 #define TX_BUF_SIZE 32
 
         .bss
-txwp:   .byte   0                       // Write pointer (0-TX_BUF_SIZE-1)
-txrp:   .byte   0                       // Read pointer (0-TX_BUF_SIZE-1)
-txcnt:  .byte   0                       // Number of chars in buffer     
-txbuf:  .fill   TX_BUF_SIZE             // TX_BUF_SIZE character circular buffer
+txwp:   .skip   1                       // Write pointer (0-TX_BUF_SIZE-1)
+txrp:   .skip   1                       // Read pointer (0-TX_BUF_SIZE-1)
+txcnt:  .skip   1                       // Number of chars in buffer
+txbuf:  .skip   TX_BUF_SIZE             // TX_BUF_SIZE character circular buffer
 
         .text
         .org    0
@@ -69,7 +69,7 @@ uart_init:
         moveb  #0x20,UCR               // Reset receiver
         moveb  #0x30,UCR               // Reset transmitter
         moveb  #0x4C,UIVR              // UART interrupt vector
-        moveb  #0xE0,UACR              // Set 2, Timer mode, divided by 1
+        moveb  #0xB0,UACR              // Baud rate set 2, counter mode, crystal clock (CTMS=011)
         moveb  #0x00,UBG1              // MSB
         moveb  #0x03,UBG2              // 115200 baud
 //        moveb  #0x30,UBG2              // 9600 baud
