@@ -45,8 +45,8 @@ The reset vector lives at address 0 (SP) and 4 (PC = `start`). Interrupt-driven 
 
 ## Datasheet
 
-`MC68307UM.pdf` (the 265-page user manual) is the authority for every register bit. It is large and copyrighted, so it is **not committed** — download it from [NXP](https://www.nxp.com/docs/en/reference-manual/MC68307UM.pdf) into the repo root, where it stays untracked (`*.pdf` is gitignored). Search it with `pdftotext -layout MC68307UM.pdf - | grep ...` (e.g. Table 8-11 for the UART UACR field encodings).
+`MC68307UM.pdf` (the 265-page user manual) is the authority for every register bit. It is large and copyrighted, so it is **not committed** — download it from [NXP](https://www.nxp.com/docs/en/reference-manual/MC68307UM.pdf) into the repo root, where it stays untracked (`*.pdf` is gitignored). Search it with `pdftotext -layout MC68307UM.pdf - | grep ...` (e.g. Table 8-11 "Timer Mode and Source Select Bits" for the UACR `CTMS` field encodings).
 
 ## UART configuration note
 
-All three programs set `UACR=0xB0` (baud set 2, counter mode, crystal clock — `CTMS=011`). The original 1990s code used `0xE0` (`CTMS=110`), which Table 8-11 lists as invalid; `0xB0` is the documented value for the intended function. Baud 115200 comes from `UBG2=0x04` at the board's 14.7456 MHz crystal (baud = crystal / (32 × UBG)).
+All three programs set `UACR=0xB0` (baud set 2, counter mode, crystal clock — `CTMS=011`). The original 1990s code used `0xE0` (`CTMS=110`); Table 8-11 ("Timer Mode and Source Select Bits") gives `011` as the only valid `CTMS` encoding and marks all other values invalid, so `0xB0` is the documented value for the intended function. Baud 115200 comes from `UBG2=0x04` at the board's 14.7456 MHz crystal (baud = crystal / (32 × UBG)).
