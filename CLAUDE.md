@@ -49,4 +49,9 @@ The reset vector lives at address 0 (SP) and 4 (PC = `start`). Interrupt-driven 
 
 ## UART configuration note
 
-All three programs set `UACR=0xB0` (baud set 2, counter mode, crystal clock — `CTMS=011`). The original 1990s code used `0xE0` (`CTMS=110`); Table 8-11 ("Timer Mode and Source Select Bits") gives `011` as the only valid `CTMS` encoding and marks all other values invalid, so `0xB0` is the documented value for the intended function. Baud 115200 comes from `UBG2=0x04` at the board's 14.7456 MHz crystal (baud = crystal / (32 × UBG)).
+All three programs set `UACR=0xE0` (baud set 2, **Timer mode, crystal ÷1** — `CTMS=110`) and `UBG2=0x03`. This is the original 1990s configuration, verified working on hardware — **do not change it.**
+
+A previous edit "corrected" these to `UACR=0xB0` (`CTMS=011`) / `UBG2=0x04` based on Table 8-11, which lists `011`=Counter as the only "valid" `CTMS` value and marks the rest invalid. **That change broke the UART on real hardware (silent TX) and was reverted.** The reasons it was wrong:
+
+- The MC68307 UART is an MC68681 DUART derivative (see the datasheet's own §10.4 driver port). Baud generation needs the *continuous* clock that **Timer mode** (`CTMS=110`) produces; **Counter mode** (`011`) is a one-shot down-count and never clocks the transmitter, so nothing shifts out. Table 8-11 is contradicted by the datasheet's own baud example, which relies on the timer. **Hardware behaviour is the source of truth over a self-contradictory table.**
+- The baud formula (datasheet §10.4: `UBG = clock / (16 × 2 × baud)`) is independent of `CTMS`. At 14.7456 MHz, `UBG=0x03` → 153600 and `UBG=0x04` → 115200. The original ships `0x03`; if the actual terminal baud needs confirming, verify on hardware before touching it.

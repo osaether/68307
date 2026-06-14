@@ -66,9 +66,9 @@ uart_init:
         moveb   #0x20,UCR               // Reset receiver
         moveb   #0x30,UCR               // Reset transmitter
         moveb   #0x4C,UIVR              // UART interrupt vector
-        moveb   #0xB0,UACR              // Baud rate set 2, counter mode, crystal clock (CTMS=011)
+        moveb   #0xE0,UACR              // Set 2, Timer mode, divided by 1 (CTMS=110)
         moveb   #0x00,UBG1              // MSB
-        moveb   #0x04,UBG2              // 115200 baud (14.7456MHz / (32*4))
+        moveb   #0x03,UBG2              // 115200 baud
 //        moveb  #0x30,UBG2              // 9600 baud
         moveb   #0,UISR                 // 0x10B is UIMR on write: mask all UART interrupts
         moveb   #0x10,UCR               // Reset mode register pointer
