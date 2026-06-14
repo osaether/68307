@@ -2,7 +2,7 @@
 
 I have provided them here in case they might be useful to someone.
 
-I have used Claude Code to fix bugs.
+I have used Claude Code to fix (and unfortunately create) some bugs.
 
 2026: The assembly syntax and makefiles have been updated for the GNU m68k cross compiler.
 On Ubuntu, install it with:
