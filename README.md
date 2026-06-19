@@ -10,12 +10,12 @@ I have used Claude Code and Google Gemini to find bugs and improve the code.
 
 The repository contains four self-contained projects demonstrating different ways to interact with the MC68307:
 
-| Project           | Description                                                                 |
-|-------------------|-----------------------------------------------------------------------------|
-| `hello_world`     | Pure assembly. Polled UART TX only (no interrupts, no buffer).              |
-| `hello_world_c`   | Mixed C & assembly. C application over an interrupt-driven TX assembly driver.|
-| `hello_world_irq` | Pure assembly. Interrupt-driven UART TX using a 32-byte circular buffer.    |
-| `rxtxtst`         | Pure assembly. Interrupt-driven TX & RX ring buffers; echoes characters.    |
+| Project           | Description                                                                    |
+|-------------------|--------------------------------------------------------------------------------|
+| `hello_world`     | Pure assembly. Polled UART TX only (no interrupts, no buffer).                 |
+| `hello_world_c`   | Mixed C & assembly. C app over an interrupt-driven TX driver.                  |
+| `hello_world_irq` | Pure assembly. Interrupt-driven UART TX using a 32-byte circular buffer.       |
+| `rxtxtst`         | Pure assembly. Interrupt-driven TX & RX ring buffers; echoes characters.       |
 
 ## Building
 
