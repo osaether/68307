@@ -7,11 +7,11 @@
 
         .text
         .org 0
-        .long   0x181000
+        .long   0x188000
         .long   start           // Reset vector
 
 start:  movew   #0x2700,SR      // Disable interrupts and stay in SP mode
-        movel   #0x181000,sp    // Set stack pointer to 0x181000
+        movel   #0x188000,sp    // Set stack pointer to 0x188000 (top of 32kB RAM)
         movel   #0xff000010,SCR // disable watch dog, 8 bit bus etc.
         movew   #0x0100,MBAR    // Set register base to 0x100000
         movew   #0xc001,BR0     // ROM at address 0x000000

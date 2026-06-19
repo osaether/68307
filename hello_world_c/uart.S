@@ -23,7 +23,7 @@ putch:  moveml d0/a0,-(sp)
         btst    #2,USR                  // Check TXRDY bit
         beq     1f                      // Write to buffer if not ready
         moveb   sp@(15),UTB             // Send first character
-        bra     2f
+        bra     3f                      // Direct send: leave TxRDY interrupt disabled
 1:      lea     txbuf,a0                // Buffer base address
         moveql  #0,d0
         moveb   txwp,d0                 // Get write pointer

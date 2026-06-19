@@ -113,7 +113,7 @@ putch:  moveml  d1/a0,-(sp)
         btst    #2,USR                  // Check TXRDY bit
         beq     1f                      // Write to buffer if not TXRDY
         moveb  d0,UTB                  // Send first character (already in d0)
-        bra     2f
+        bra     3f                      // Direct send: leave TxRDY interrupt disabled
 1:      lea     txbuf,a0
         moveql  #0,d1
         moveb   txwp,d1
