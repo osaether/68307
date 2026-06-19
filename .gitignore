@@ -10,3 +10,6 @@
 
 # Transient session-handoff notes
 HANDOFF.md
+
+# Local optimization notes (not committed)
+OPTIMIZATIONS.md
