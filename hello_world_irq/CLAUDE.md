@@ -8,7 +8,7 @@ Repo-wide guidance (toolchain, build commands, datasheet workflow, memory layout
 
 Single-file (`hello_world.S`) interrupt-driven UART TX using a 32-byte circular buffer:
 
-- **BSS**: `txwp` / `txrp` / `txcnt` (buffer state) + `txbuf[32]`, all reserved with `.skip` (`.bss` is NOBITS, so data initializers there are silently dropped — `start` zeroes them at runtime)
+- **BSS**: `txwp` / `txrp` / `txcnt` (buffer state) + `txbuf[32]`, reserved with `.byte`/`.fill` in `.bss` (`.bss` is NOBITS, so the zero initializers are silently dropped — `start` zeroes them at runtime)
 - **`start`**: relocates the SIM (`SCR`, `MBAR=0x0100` → module base `0x100000`), disables the watchdog (`WRR`), programs chip selects `BR0`/`OR0` (ROM @ 0) and `BR1`/`OR1` (RAM @ 0x180000), runs the CMS micro-module RAM-CS-latch clear loop (removable on other boards), calls `uart_init`, zeroes the buffer state, sets `PICR`/`PIVR`, drops the interrupt mask to level 7 (`movew #0x2000,sr`), then calls `puts(message)` and loops forever
 - **`uart_init`**: configures port B pins (`PBCNT`), resets RX/TX, sets `UACR=0xE0` (baud set 2, Timer mode, crystal ÷1, `CTMS=110`) and `UBG2=0x03` — the original hardware-verified config; see the UART note in `../CLAUDE.md` for why the `0xB0`/`0x04` "fix" was reverted, 8N1, enables TX only — interrupts off initially
 - **`putch`**: if buffer empty and TXRDY, sends directly to UTB; otherwise enqueues to circular buffer and enables TX interrupt (`UIMR=1`)

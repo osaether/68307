@@ -101,7 +101,7 @@ Wrap-around uses bit-AND: `andib #(BUF_SIZE-1), xwp` — only valid when size is
 4. Handle TX: send one byte from ring buffer to `UTB`
 5. Restore `UIMR`: always set bit 1 (RxRDY enable); set bit 0 (TxRDY enable) only if TX buffer is non-empty
 
-**`putch`** fast path: if TX buffer is empty AND TxRDY is set, write directly to `UTB`. Otherwise buffer the byte. Always sets `UIMR` to enable the TX interrupt (bit 0), preserving the RX bit (bit 1) in `rxtxtst`.
+**`putch`** fast path: if TX buffer is empty AND TxRDY is set, write directly to `UTB`. Otherwise buffer the byte. Only the buffered path enables the TX interrupt (`UIMR` bit 0), preserving the RX bit (bit 1) in `rxtxtst`; the direct-send path leaves TxRDY disabled (`hello_world_irq` doesn't touch `UIMR`; `rxtxtst` sets `UIMR=0x02`, RxRDY only) since the byte is already gone.
 
 **`getch`** (`rxtxtst` only): busy-waits on `rxcnt`, then reads one byte from the RX ring buffer.
 
