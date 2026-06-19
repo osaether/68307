@@ -15,46 +15,46 @@ txbuf:  .fill   TX_BUF_SIZE             // TX_BUF_SIZE character circular buffer
 
         .text
         .global putch
-putch:  moveml d0/a0,-(sp)
-        cmpb    #TX_BUF_SIZE,txcnt
+putch:  movem.l d0/a0,-(sp)
+        cmp.b    #TX_BUF_SIZE,txcnt
         bge     3f                      // Buffer full */
-        tstb    txcnt
+        tst.b    txcnt
         bne     1f
         btst    #2,USR                  // Check TXRDY bit
         beq     1f                      // Write to buffer if not ready
-        moveb   sp@(15),UTB             // Send first character
+        move.b   sp@(15),UTB             // Send first character
         bra     3f                      // Direct send: leave TxRDY interrupt disabled
 1:      lea     txbuf,a0                // Buffer base address
-        moveql  #0,d0
-        moveb   txwp,d0                 // Get write pointer
-        moveb   sp@(15),(a0,d0)         // Store character
-        addqb   #1,txwp
-        andib   #(TX_BUF_SIZE-1),txwp
-        addqb   #1,txcnt
-2:      moveb   #1,UIMR                 // Enable TX interrupt for remaining chars
-3:      moveml (sp)+,d0/a0
+        moveq  #0,d0
+        move.b   txwp,d0                 // Get write pointer
+        move.b   sp@(15),(a0,d0)         // Store character
+        addq.b   #1,txwp
+        andi.b   #(TX_BUF_SIZE-1),txwp
+        addq.b   #1,txcnt
+2:      move.b   #1,UIMR                 // Enable TX interrupt for remaining chars
+3:      movem.l (sp)+,d0/a0
         rts
 
         .global uart_init
 uart_init:
-        clrb    txwp
-        clrb    txrp
-        clrb    txcnt
-        movew   #0x000C,PBCNT           // PB2 and PB3 used for UART
-        moveb   #0x20,UCR               // Reset receiver
-        moveb   #0x30,UCR               // Reset transmitter
-        moveb   #0x4C,UIVR              // UART interrupt vector
-        moveb   #0xE0,UACR              // Set 2, Timer mode, divided by 1 (CTMS=110)
-        moveb   #0x00,UBG1              // MSB
-        moveb   #0x03,UBG2              // 115200 baud
-//        moveb  #0x30,UBG2              // 9600 baud
-        moveb   #0,UISR                 // 0x10B is UIMR on write: mask all UART interrupts
-        moveb   #0x10,UCR               // Reset mode register pointer
-        moveb   #0x13,UMR1              // 8N1
-        moveb   #0x07,UMR2              // 1 stop bit
-        moveb   #0xDD,UCSR              // Clock select
-        moveb   #0x04,UCR               // Enable transmitter ONLY
-        moveb   #0x00,UIMR              // NO interrupts for now
+        clr.b    txwp
+        clr.b    txrp
+        clr.b    txcnt
+        move.w   #0x000C,PBCNT           // PB2 and PB3 used for UART
+        move.b   #0x20,UCR               // Reset receiver
+        move.b   #0x30,UCR               // Reset transmitter
+        move.b   #0x4C,UIVR              // UART interrupt vector
+        move.b   #0xE0,UACR              // Set 2, Timer mode, divided by 1 (CTMS=110)
+        move.b   #0x00,UBG1              // MSB
+        move.b   #0x03,UBG2              // 115200 baud
+//        move.b  #0x30,UBG2              // 9600 baud
+        move.b   #0,UISR                 // 0x10B is UIMR on write: mask all UART interrupts
+        move.b   #0x10,UCR               // Reset mode register pointer
+        move.b   #0x13,UMR1              // 8N1
+        move.b   #0x07,UMR2              // 1 stop bit
+        move.b   #0xDD,UCSR              // Clock select
+        move.b   #0x04,UCR               // Enable transmitter ONLY
+        move.b   #0x00,UIMR              // NO interrupts for now
         rts
 
 .align 4
@@ -63,20 +63,20 @@ uartisr:
         btst    #2,USR                  // Is it a TX interrupt?
         beq     2f
 
-        moveb   #0,UIMR
-        moveml  d0-d1/a0,-(sp)          // Save registers */
-        tstb    txcnt
+        move.b   #0,UIMR
+        movem.l  d0-d1/a0,-(sp)          // Save registers */
+        tst.b    txcnt
         beq     1f                      // No data in buffer */
         lea     txbuf,a0                // Buffer base address */
-        moveql  #0,d1                   // Clear all 32 bits of d1 */
-        moveb   txrp,d1                 // Load read pointer */
-        moveb   (a0,d1),d0
-        moveb   d0,UTB                  // Send the actual character */       
-        addqb   #1,txrp
-        andib   #(TX_BUF_SIZE-1),txrp
-        subqb   #1,txcnt
-        tstb    txcnt
+        moveq  #0,d1                   // Clear all 32 bits of d1 */
+        move.b   txrp,d1                 // Load read pointer */
+        move.b   (a0,d1),d0
+        move.b   d0,UTB                  // Send the actual character */       
+        addq.b   #1,txrp
+        andi.b   #(TX_BUF_SIZE-1),txrp
+        subq.b   #1,txcnt
+        tst.b    txcnt
         beq     1f
-        moveb   #1,UIMR                 // Enable TX interrupt for remaining chars */
-1:      moveml  (sp)+,d0-d1/a0          // Restore registers */
+        move.b   #1,UIMR                 // Enable TX interrupt for remaining chars */
+1:      movem.l  (sp)+,d0-d1/a0          // Restore registers */
 2:      rte

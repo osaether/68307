@@ -49,7 +49,7 @@ All projects use `m68k-linux-gnu-gcc` as the assembler front-end with these flag
 - `-Wa,-mcpu=68307` — target CPU
 - `-Wa,--register-prefix-optional` — allows `d0` instead of `%d0`
 
-The `hello_world` project uses classic Motorola dot-suffix syntax (`move.b`, `bge.s`). All other projects use the suffix-less form (`moveb`, `bge`). Both are valid; do not mix within a file.
+All projects use classic Motorola dot-suffix syntax for operation sizes (`move.b`, `clr.b`, `movem.l`, `btst.b`) and for short branches (`beq.s`). GNU `as` also accepts a suffix-less form (`moveb`, `clrb`, `beqs`) where the dot is dropped, but the dotted style is the conventional one and is used throughout — don't reintroduce the suffix-less form. Mnemonics that carry no operation size (`bra`, `bsr`, `jmp`, `dbra`, `lea`, `rts`, `rte`) take no dot, and `moveq` is written without a size suffix since it is inherently long. Note `hello_world` writes the byte size on the bit-test (`btst.b`) while the other projects let the assembler infer it (`btst`); both are valid.
 
 Character in `d0` is the convention for `putch` argument (not on stack).
 
