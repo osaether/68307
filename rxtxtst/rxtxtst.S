@@ -174,7 +174,8 @@ putch:  moveml  d1/a0,-(sp)
         btst    #2,USR                  // Check TxRDY
         beq     1f                      // Not ready - use buffer
         moveb   d0,UTB                  // Send directly (bypass buffer)
-        bra     2f
+        moveb   #2,UIMR                 // Direct send: keep RxRDY only, no TxRDY needed
+        bra     3f
 1:      lea     txbuf,a0
         moveql  #0,d1
         moveb   txwp,d1
@@ -182,6 +183,6 @@ putch:  moveml  d1/a0,-(sp)
         addqb   #1,txwp
         andib   #(TX_BUF_SIZE-1),txwp
         addqb   #1,txcnt
-2:      moveb   #3,UIMR                 // Enable both RxRDY and TxRDY interrupts
+2:      moveb   #3,UIMR                 // Buffered: enable both RxRDY and TxRDY interrupts
 3:      moveml  (sp)+,d1/a0
         rts
