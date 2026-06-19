@@ -37,9 +37,9 @@ putch:  moveml d0/a0,-(sp)
 
         .global uart_init
 uart_init:
-        moveb   #0,txwp
-        moveb   #0,txrp
-        moveb   #0,txcnt
+        clrb    txwp
+        clrb    txrp
+        clrb    txcnt
         movew   #0x000C,PBCNT           // PB2 and PB3 used for UART
         moveb   #0x20,UCR               // Reset receiver
         moveb   #0x30,UCR               // Reset transmitter

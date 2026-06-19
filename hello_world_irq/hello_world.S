@@ -39,9 +39,9 @@ rloop:  moveb   0x180000,d1
 
         bsr     uart_init        
         
-        moveb  #0,txwp
-        moveb  #0,txrp
-        moveb  #0,txcnt
+        clrb   txwp
+        clrb   txrp
+        clrb   txcnt
         
         movew  #0x7070,PICR            // Set interrupt priority
         moveb  #0x40,PIVR              // Interrupt base vector
@@ -52,16 +52,13 @@ rloop:  moveb   0x180000,d1
 main_loop:
         bra     main_loop
 
-puts:   moveml  d1/a0,-(sp)
+puts:   movel   a0,-(sp)
         movel   d0,a0
-        moveql  #0,d1
-1:      moveb   (a0, d1),d0
-        cmpb    #0,d0
+1:      moveb   (a0)+,d0
         beq     2f
         bsr     putch
-        addql   #1,d1
-        jmp     1b
-2:      moveml  (sp)+,d1/a0
+        bra     1b
+2:      movel   (sp)+,a0
         rts
 
 uart_init:
